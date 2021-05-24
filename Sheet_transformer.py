@@ -1,0 +1,41 @@
+import openpyxl as xl;
+import pandas as pd
+
+read_file = pd.read_csv ('summary.csv')
+read_file.to_excel ('summary.xlsx', index = None, header=True) 
+
+wb1 = xl.load_workbook('summary.xlsx') 
+print(wb1)
+ws1 = wb1.worksheets[0] 
+wb = xl.Workbook()
+sheet_obj = wb.active
+
+def filldata(word,j):
+    for k in range(len(word)):
+        obj = sheet_obj.cell(row = j,column = k+1)
+        obj.value = word[k]
+
+list_of_op=['fill','copy','compare','dualcast']
+list_of_queuedepth=[1,2,4,8,16,32,64,128,256,512]
+#list_of_ts=["qd/ts",1024,2048,4096,8192,16384,65536,131072,262144]
+list_of_ts=["qd/ts",'1K','2K','4K','8K','16K','32K','64K','128K','256K']
+mr = ws1.max_row 
+mc = ws1.max_column 
+row_count=1
+for op in list_of_op:
+    filldata([op],row_count)
+    row_count=row_count+1
+    filldata(list_of_ts,row_count)
+    for queuedepth in list_of_queuedepth:
+        row_count=row_count+1
+        word = [] 
+        word.append(queuedepth)
+        for i in range (2, mr + 1):
+            BW=(ws1.cell(row = i, column=12).value)
+            op_1=(ws1.cell(row = i, column=1).value)
+            qd_1=(ws1.cell(row = i, column=2).value)
+            if (op_1==str(op) and queuedepth==int(qd_1)):
+                word.append(ws1.cell(row = i, column=12).value)     
+            filldata(word,row_count)   
+    row_count=row_count+1       
+wb.save(str("single_instance.xlsx"))
