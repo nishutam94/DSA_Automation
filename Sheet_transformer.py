@@ -1,10 +1,15 @@
 import openpyxl as xl;
 import pandas as pd
+import argparse
+from argparse import ArgumentParser
+parser = ArgumentParser()
+parser.add_argument("-p", "--output_dir", help="Specify Path of logs",default="./Automation_log/")
+parser.add_argument("-o", "--output", help="Specify name of summary",default="summary.csv")
+args = parser.parse_args()
+read_file = pd.read_csv (args.output_dir+'summary.csv')
+read_file.to_excel (args.output_dir+'summary.xlsx', index = None, header=True) 
 
-read_file = pd.read_csv ('summary.csv')
-read_file.to_excel ('summary.xlsx', index = None, header=True) 
-
-wb1 = xl.load_workbook('summary.xlsx') 
+wb1 = xl.load_workbook(args.output_dir+'summary.xlsx') 
 print(wb1)
 ws1 = wb1.worksheets[0] 
 wb = xl.Workbook()
@@ -15,7 +20,7 @@ def filldata(word,j):
         obj = sheet_obj.cell(row = j,column = k+1)
         obj.value = word[k]
 
-list_of_op=['fill','copy','compare','dualcast']
+list_of_op=['fill','copy','compare','dualcast','crc32c']
 list_of_queuedepth=[1,2,4,8,16,32,64,128,256,512]
 #list_of_ts=["qd/ts",1024,2048,4096,8192,16384,65536,131072,262144]
 list_of_ts=["qd/ts",'1K','2K','4K','8K','16K','32K','64K','128K','256K']
@@ -38,4 +43,4 @@ for op in list_of_op:
                 word.append(ws1.cell(row = i, column=12).value)     
             filldata(word,row_count)   
     row_count=row_count+1       
-wb.save(str("single_instance.xlsx"))
+wb.save(str(args.output_dir+"single_instance.xlsx"))
