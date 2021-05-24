@@ -1,0 +1,12 @@
+[
+{
+    "work": ["crc32c"],
+    "queuedepth": [1],
+    "thread": [1],
+    "cpumask":["0x01"],
+    "time":10,
+    "transfer":[1024],
+    "varify":false
+}
+
+]
