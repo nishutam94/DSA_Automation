@@ -29,7 +29,7 @@ class Parser():
                     data.append(core[0])
                     data.append(core[2])
                     data.append(words[2])
-                    data.extend(words[6].strip("\n").split(","))
+                    #data.extend(words[6].strip("\n").split(","))
                     list_of_words.append(word+data)
         print("you can find the log summary at :",self.output_dir+self.output)
         with open(self.output_dir+self.output, 'w') as f:
