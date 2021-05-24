@@ -1,0 +1,56 @@
+[
+    {
+    "work": ["fill"],
+    "queuedepth": [256],
+    "thread": [1],
+    "cpumask":["0x01"],
+    "time":10,
+    "transfer":[131072],
+    "varify":false
+    },
+    {
+    "work": ["fill"],
+    "queuedepth": [16],
+    "thread": [1],
+    "cpumask":["0x01"],
+    "time":10,
+    "transfer":[32768],
+    "varify":false
+    },
+    {
+    "work": ["compare"],
+    "queuedepth": [2],
+    "thread": [1],
+    "cpumask":["0x01"],
+    "time":10,
+    "transfer":[32768],
+    "varify":false
+    },
+    {
+    "work": ["compare"],
+    "queuedepth": [256],
+    "thread": [1],
+    "cpumask":["0x01"],
+    "time":10,
+    "transfer":[131072],
+    "varify":false
+    },
+    {
+    "work": ["fill"],
+    "queuedepth": [16],
+    "thread": [4],
+    "cpumask":["0x01"],
+    "time":10,
+    "transfer":[131072],
+    "varify":false
+    },
+    {
+    "work": ["compare"],
+    "queuedepth": [256],
+    "thread": [2],
+    "cpumask":["0x01"],
+    "time":10,
+    "transfer":[32768],
+    "varify":false
+    }
+]

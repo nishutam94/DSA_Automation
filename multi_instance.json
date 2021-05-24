@@ -1,0 +1,11 @@
+[
+    {
+    "work": ["fill","copy","compare","dualcast"],
+    "queuedepth": [16],
+    "thread": [1,2,4,8],
+    "cpumask":["0x01"],
+    "time":10,
+    "transfer":[131072],
+    "varify":false
+    }
+]
