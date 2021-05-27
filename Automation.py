@@ -22,6 +22,8 @@ class Automation():
         self.log_dir=""
         self.command=""
         self.instance="Multi"
+        self.emon=self.args.emon
+        self.spdk_top=self.args.spdk_top
 
     def date_logs(self):
         x = datetime.datetime.now()       
@@ -99,15 +101,20 @@ class Automation():
         window = session.new_window(attach=True, window_name="session_test")
         pane1 = window.attached_pane
         pane2 = window.split_window(vertical=True)
-        #pane3 = window.split_window(vertical=True) 
-        #pane4 = window.split_window(vertical=True)
+        if self.emon:
+            pane3 = window.split_window(vertical=True) 
+        if self.spdk_top:
+            pane4 = window.split_window(vertical=True) 
         window.select_layout('tiled')
         pane1.send_keys('./../build/examples/accel_perf '+self.command)
         time.sleep(3)
         pane2.send_keys('./../scripts/rpc.py idxd_scan_accel_engine -c 0')
         pane2.send_keys('./.././scripts/rpc.py framework_start_init')
-        #pane3.send_keys('htop')
-        #pane4.send_keys('./build/bin/spdk_top')
+        if self.emon:
+            pane3.send_keys('timeout 40 python2 emon.py')
+        if self.spdk_top:
+            pane4.send_keys('./../build/bin/spdk_top')
+        
         pane1.send_keys('tmux kill-session -t session_test')
         server.attach_session(target_session="session_test")
     
@@ -128,6 +135,8 @@ if __name__ == "__main__":
     parser.add_argument('--test_op', type=str, default='all',help="select ops: fill,compare")
     parser.add_argument('--iteration', type=int, default=1,help="number of iteration you want to run")
     parser.add_argument('--summary_name', type=str, default="summary.csv",help="name for the final summary file")
+    parser.add_argument('--emon', type=bool, default=False,help="name for the final summary file")
+    parser.add_argument('--spdk_top', type=bool, default=False,help="name for the final summary file")
     args = parser.parse_args()
     Automation=Automation(args)
     Automation.date_logs()
@@ -136,5 +145,5 @@ if __name__ == "__main__":
     Automation.summary()
  
 
-
+ 
 

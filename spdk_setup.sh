@@ -22,10 +22,6 @@ prepare_run_cmd()
 git clone https://github.com/spdk/spdk
 cd spdk
 sudo scripts/pkgdep.sh --all
-#git fetch "https://review.spdk.io/gerrit/spdk/spdk" refs/changes/48/6148/2 && git checkout FETCH_HEAD
-#git fetch "https://review.spdk.io/gerrit/spdk/spdk" refs/changes/87/6287/3 && git checkout FETCH_HEAD
-git fetch "https://review.spdk.io/gerrit/spdk/spdk" refs/changes/25/6325/6 && git checkout FETCH_HEAD for data collection 
-#git fetch https://review.spdk.io/gerrit/spdk/spdk refs/changes/60/7660/2 && git checkout FETCH_HEAD  for memmeory cha
 git submodule update --init
 ./configure --with-idxd --enable-debug
 make

@@ -4,7 +4,7 @@
     "queuedepth": [16],
     "thread": [1],
     "cpumask":["0x01"],
-    "time":10,
+    "time":60,
     "transfer":[131072],
     "varify":false
     }

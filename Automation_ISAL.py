@@ -98,9 +98,11 @@ class Automation():
         session = server.find_where({"session_name": "session_test"})
         window = session.new_window(attach=True, window_name="session_test")
         pane1 = window.attached_pane
+        pane4 = window.split_window(vertical=True)
         window.select_layout('tiled')
         pane1.send_keys('./../build/examples/accel_perf '+self.command)
         time.sleep(3)
+        pane4.send_keys('./../build/bin/spdk_top')
         pane1.send_keys('tmux kill-session -t session_test')
         server.attach_session(target_session="session_test")
     
