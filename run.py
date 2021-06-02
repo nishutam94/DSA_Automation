@@ -59,13 +59,13 @@ class Automation():
         if self.spdk_top:
             pane4 = window.split_window(vertical=True) 
         window.select_layout('tiled')
-        pane1.send_keys('./../build/examples/accel_perf '+self.command)
+        pane1.send_keys(self.spdk_work_dir+'/build/examples/accel_perf '+self.command)
         time.sleep(3)
-        pane2.send_keys('./../scripts/rpc.py idxd_scan_accel_engine -c 0')
-        pane2.send_keys('./.././scripts/rpc.py framework_start_init')
+        pane2.send_keys(self.spdk_work_dir+'/scripts/rpc.py idxd_scan_accel_engine -c 0')
+        pane2.send_keys(self.spdk_work_dir+'/scripts/rpc.py framework_start_init')
 
         if self.spdk_top:
-            pane4.send_keys('./../build/bin/spdk_top')
+            pane4.send_keys(self.spdk_work_dir+'/build/bin/spdk_top')
         
         pane1.send_keys('tmux kill-session -t session_test')
         server.attach_session(target_session="session_test")
@@ -100,13 +100,13 @@ class Automation():
 
     def Activate_setup(self):
         print("Activating the Setup")
-        os.system("./../scripts/setup.sh")
+        os.system(self.spdk_work_dir+'/scripts/setup.sh')
 
 if __name__ == "__main__":
     print("Using Automation version :" ,VERSION)
     parser = ArgumentParser()
-    parser.add_argument('-d','--output_dir', type=str, default='./../Automation_log/', help="directory to save the log")
-    parser.add_argument('-o','--spdk_work_dir', type=str, default='./../', help="SPDK working directory path")
+    parser.add_argument('-d','--output_dir', type=str, default='./Automation_log/', help="directory to save the log")
+    parser.add_argument('-o','--spdk_work_dir', type=str, default='/root/DSA/spdk', help="SPDK working directory path")
     parser.add_argument('-t','--thread', type=int, default=1,help="no of thread")
     parser.add_argument('-q','--queuedepth', type=int, default=16,help="no of queue")
     parser.add_argument('-s','--size', type=int, default=131072,help="no of queue")
