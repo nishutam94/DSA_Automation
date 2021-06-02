@@ -106,14 +106,14 @@ class Automation():
         if self.spdk_top:
             pane4 = window.split_window(vertical=True) 
         window.select_layout('tiled')
-        pane1.send_keys('./../build/examples/accel_perf '+self.command)
+        pane1.send_keys(self.spdk_work_dir+'/build/examples/accel_perf '+self.command)
         time.sleep(3)
-        pane2.send_keys('./../scripts/rpc.py idxd_scan_accel_engine -c 0')
-        pane2.send_keys('./.././scripts/rpc.py framework_start_init')
+        pane2.send_keys(self.spdk_work_dir+'/scripts/rpc.py idxd_scan_accel_engine -c 0')
+        pane2.send_keys(self.spdk_work_dir+'/scripts/rpc.py framework_start_init')
         if self.emon:
             pane3.send_keys('timeout 40 python2 emon.py')
         if self.spdk_top:
-            pane4.send_keys('./../build/bin/spdk_top')
+            pane4.send_keys(self.spdk_work_dir+'/build/bin/spdk_top')
         
         pane1.send_keys('tmux kill-session -t session_test')
         server.attach_session(target_session="session_test")
@@ -124,13 +124,13 @@ class Automation():
 
     def Activate_setup(self):
         print("Activating the Setup")
-        os.system("./../scripts/setup.sh")
+        os.system(self.spdk_work_dir+"/scripts/setup.sh")
 
 if __name__ == "__main__":
     print("Using Automation version :" ,VERSION)
     parser = ArgumentParser()
-    parser.add_argument('--output_dir', type=str, default='./../Automation_log/', help="directory to save the log")
-    parser.add_argument('--spdk_work_dir', type=str, default='./../', help="SPDK working directory path")
+    parser.add_argument('--output_dir', type=str, default='./Automation_log/', help="directory to save the log")
+    parser.add_argument('--spdk_work_dir', type=str, default='/root/DSA/spdk', help="SPDK working directory path")
     parser.add_argument('--spdk_test', type=str, default='./config.json',help="name of the configuration tests file")
     parser.add_argument('--test_op', type=str, default='all',help="select ops: fill,compare")
     parser.add_argument('--iteration', type=int, default=1,help="number of iteration you want to run")

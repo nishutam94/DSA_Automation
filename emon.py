@@ -16,8 +16,10 @@ class emon():
 				emon.startSampling()
 
 		'''
+
+
 		self.args = args
-		self.results = self.args.resultsPath 
+		self.results = self.args.resultsPath
 		self.input = self.args.input
 		self.emonPath = self.args.emonPath
 		self.measTime = self.args.measTime
@@ -90,6 +92,7 @@ class emon():
 			lapsedTime = endTime - iniTime
 			iteration += 1
 		print "EMON data collected for: ", self.measTime
+		print "logs",self.results
 
 	def installEmon(self):
 		print "\nSetting EMON..."
@@ -107,7 +110,7 @@ class emon():
 if __name__ == "__main__":
 	parser = ArgumentParser()
 	parser.add_argument('--emonPath', type=str, default='/root/emon/sep', help="directory where emon installed")
-	parser.add_argument("-o",'--resultsPath', type=str, default="/root/emon/results2", help="output directory path")
+	parser.add_argument("-o",'--resultsPath', type=str, default=os.getcwd()+"/emon", help="output directory path")
 	parser.add_argument('--input', type=str, default='spr-2s-events.txt',help="path configuration emon file")
 	parser.add_argument('--measTime', type=int, default=30,help="time to coplete emon")
 	args = parser.parse_args()

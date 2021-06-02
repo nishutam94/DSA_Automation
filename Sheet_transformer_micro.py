@@ -20,7 +20,7 @@ def filldata(word,j):
         obj = sheet_obj.cell(row = j,column = k+1)
         obj.value = word[k]
 
-list_of_op=[4]
+list_of_op=[4,5,9,3,16]
 list_of_queuedepth=[1,2,4,8,16,32,64,128]
 #list_of_ts=["qd/ts",1024,2048,4096,8192,16384,65536,131072,262144]
 list_of_ts=["qd/ts",'1K','2K','4K','8K','16K','32K','64K','128K']

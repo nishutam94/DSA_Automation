@@ -1,7 +1,7 @@
 echo "Automation started"
 date="$(date +"%Y_%m_%d_%H_%M_%S")"
 
-for o in 4;do
+for o in 16;do
 for n in 1 2 4 8 16 32 64 128 ; do
 for s in  1K 2K 4K 8K 16K 32K 64K 128K ; do
 for i in 1000; do
@@ -12,7 +12,7 @@ echo $logs
 
 log="$logs/${o}_${n}_${s}_${i}.txt"
 echo "============================================================================="
-cmd="./../src/dsa_micros -n${n} -s${s} -j -c -f -i${i} -o${o}" 
+cmd="/root/DSA/dsa_micros/src/dsa_micros -n${n} -s${s} -j -c -f -i${i} -o${o}" 
 echo $cmd
 bash -c "$cmd" 2>&1 | tee $log
 
