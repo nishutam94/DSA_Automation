@@ -23,14 +23,14 @@ class Parser():
               with open (self.output_dir + file, "r+") as myfile:
                 for line in  myfile:
                   data=[]
-                  if "MiB" in line and "Total:" not in line:
+                  if "MiB" in line and "Total:"  in line:
                     words = [ele for ele in line.split(" ") if ele.strip()]
                     core=words[0].strip(",")
                     data.append(core[0])
                     data.append(core[2])
                     #data.append(words[2])
                     #print(words[2])
-                    bw=round(int(words[2])/1000,1)
+                    bw=round(int(words[2])/954,1)
                     #print(bw)
                     data.append(bw)
                     #data.extend(words[6].strip("\n").split(","))

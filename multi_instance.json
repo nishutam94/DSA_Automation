@@ -1,9 +1,9 @@
 [
     {
-    "work": ["fill","copy","compare","dualcast"],
+    "work": ["fill","copy","compare","dualcast","crc32c"],
     "queuedepth": [16],
-    "thread": [1,2,4,8],
-    "cpumask":["0x01"],
+    "thread": [1],
+    "cpumask":["0x0f"],
     "time":10,
     "transfer":[131072],
     "varify":false
