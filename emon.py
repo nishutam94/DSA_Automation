@@ -4,22 +4,9 @@ import argparse
 from argparse import ArgumentParser
 class emon():
 	def __init__(self, args):
-		'''
-			emonPath -> EMON installation root folder (where sep_vars.sh is located)
-			resultsPath -> Path to store output. If not given root/emon/results is used as default. 
-			input -> CPU MSR/event file 
-			measTime -> Amount of time in seconds. 
-
-			Usage:
-				import emon
-				emon = emon(<results_path>, <events_input_file>, <measurement_time_in_s>)
-				emon.startSampling()
-
-		'''
-
-
 		self.args = args
 		self.results = self.args.resultsPath
+		self.workload = self.args.workload
 		self.input = self.args.input
 		self.emonPath = self.args.emonPath
 		self.measTime = self.args.measTime
@@ -40,12 +27,18 @@ class emon():
 			else:
 				print "Results path given does not exists, creating"
 				self.results = "/root/emon/results"
+		
+		if self.workload == None:
+			timeMark = time.struct_time(time.gmtime())
+			timeMark = "%s_%s_%s___%s_%s_%s"%(timeMark.tm_year, timeMark.tm_mon, timeMark.tm_mday, timeMark.tm_hour, timeMark.tm_min, timeMark.tm_sec)
+			self.results = self.results + "/" + timeMark
+		else:
+			self.results = self.results + "/" + self.workload
 
 		#Adding date and time to the results
-		timeMark = time.struct_time(time.gmtime())
-		timeMark = "%s_%s_%s___%s_%s_%s"%(timeMark.tm_year, timeMark.tm_mon, timeMark.tm_mday, timeMark.tm_hour, timeMark.tm_min, timeMark.tm_sec)
-		self.results = self.results + "/" + timeMark
+		
 		os.system("mkdir %s"%(self.results))
+		print self.results
 
 		#Validating EMON path
 		if os.path.isfile(self.emonPath + "/sep_vars.sh"):
@@ -57,8 +50,6 @@ class emon():
 		#Validating input file
 		if os.path.isfile(self.emonPath + "/"+self.input):
 			self.input = self.emonPath + "/"+self.input
-
-			print(self.input)
 		else:
 			print "Input file not located @: %s, please place a copy there"%(self.emonPath)
 			sys.exit()
@@ -91,8 +82,8 @@ class emon():
 			endTime = time.time()
 			lapsedTime = endTime - iniTime
 			iteration += 1
-		print "EMON data collected for: ", self.measTime
-		print "logs",self.results
+		print "EMON data collected for: %s"%(self.measTime)
+		print "logs : %s"%(self.results)
 
 	def installEmon(self):
 		print "\nSetting EMON..."
@@ -110,7 +101,8 @@ class emon():
 if __name__ == "__main__":
 	parser = ArgumentParser()
 	parser.add_argument('--emonPath', type=str, default='/root/emon/sep', help="directory where emon installed")
-	parser.add_argument("-o",'--resultsPath', type=str, default=os.getcwd()+"/emon", help="output directory path")
+	parser.add_argument("-o",'--resultsPath', type=str, default=os.getcwd()+"/emon", help="emon output directory path")
+	parser.add_argument("-w",'--workload', type=str, default=None, help="workload directory name")
 	parser.add_argument('--input', type=str, default='spr-2s-events.txt',help="path configuration emon file")
 	parser.add_argument('--measTime', type=int, default=30,help="time to coplete emon")
 	args = parser.parse_args()
