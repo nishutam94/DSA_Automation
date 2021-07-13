@@ -60,7 +60,7 @@ class Automation():
                           log_name=self.log_dir+"/"+self.emon_dir
                           self.command="-o"+str(work)+" -n"+str(queuedepth)+" -s"+str(transfer)+" -k"+str(cpumask)+" -i"+str(index["time"])+" -x100 -g3 -fc -m "+str(var)+" 2>&1 | tee "+log_name+".txt;" 
                           #print(self.command)
-                          print(self.work_dir+'/./src/dsa_micro '+self.command)
+                          print(self.work_dir+'/./src/dsa_micros '+self.command)
                           Automation.run_session()
       
 
@@ -76,7 +76,7 @@ class Automation():
         pane1 = window.attached_pane
         pane2 = window.split_window(vertical=True) 
         window.select_layout('tiled')
-        pane1.send_keys('timeout 60 ./../master/src/dsa_micros '+self.command)
+        pane1.send_keys('timeout 60 ./../dsa_micros/src/dsa_micros '+self.command)
         #pane1.send_keys('./../master/src/dsa_micros '+self.command)
         pane1.send_keys('sleep 5')
         #time.sleep(3)
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument('--output_dir', type=str, default='./log/', help="directory to save the log")
     parser.add_argument('--work_dir', type=str, default='/root/DSA/master', help="working directory path")
-    parser.add_argument('--test', type=str, default='./micro_config/emon_config.json',help="name of the configuration tests file")
+    parser.add_argument('--test', type=str, default='./config/emon_config.json',help="name of the configuration tests file")
     parser.add_argument('--iteration', type=int, default=1,help="number of iteration you want to run")
     parser.add_argument('--emon', type=bool, default=False,help="name for the final summary file")
     parser.add_argument('--summary_name', type=str, default="summary.csv",help="name for the final summary file")
