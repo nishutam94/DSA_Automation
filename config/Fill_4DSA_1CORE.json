@@ -1,0 +1,11 @@
+[
+    {
+    "work": ["fill"],
+    "queuedepth": [16],
+    "thread": [4],
+    "cpumask":["0x01"],
+    "time":60,
+    "transfer":[131072],
+    "varify":false
+    }
+]

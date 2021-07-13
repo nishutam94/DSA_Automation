@@ -1,0 +1,11 @@
+[
+    {    
+    "work": [3],
+    "queuedepth": [32],
+    "thread": [1],
+    "cpumask":["0,1,2,3,4,5,6,7,8,9,10,11,12,13"],
+    "time":1000,
+    "transfer":["16k"],
+    "memory":["Memory"]
+    }
+]
