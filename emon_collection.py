@@ -22,11 +22,12 @@ class Automation():
         self.emon_dir=""
         self.log_dir=""
         self.command=""
+        self.dir=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') 
 
     def date_logs(self):
-        x = datetime.datetime.now()       
-        path=os.path.join(self.output_dir, datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
-        self.log_dir=path       
+   
+        path=os.path.join(self.output_dir,self.dir)
+        self.log_dir=path    
         try:  
             os.makedirs(path) 
             print(path,"created for output logs")  
@@ -55,10 +56,10 @@ class Automation():
                             var="-prd"
                           else:
                             var=" " 
-                          self.emon_dir="software_2"+str(work)+"_"+str(queuedepth)+"_"+str(transfer)+"_"+str(cpumask)+"_"+str(thread)+"_"+str(index["time"])+"_"+str(iteration)+"_"+str(memory)
+                          self.emon_dir="Hardware_"+str(work)+"_"+str(queuedepth)+"_"+str(transfer)+"_"+str(cpumask)+"_"+str(thread)+"_"+str(index["time"])+"_"+str(iteration)+"_"+str(memory)
                           print("emon dir : ",self.emon_dir)
                           log_name=self.log_dir+"/"+self.emon_dir
-                          self.command="-o"+str(work)+" -n"+str(queuedepth)+" -s"+str(transfer)+" -k"+str(cpumask)+" -i"+str(index["time"])+" -x100 -g3 -fc -m "+str(var)+" 2>&1 | tee "+log_name+".txt;" 
+                          self.command="-o"+str(work)+" -n"+str(queuedepth)+" -s"+str(transfer)+" -k"+str(cpumask)+" -i"+str(index["time"])+" -g3 -fjc  "+str(var)+" 2>&1 | tee "+log_name+".txt;" 
                           #print(self.command)
                           print(self.work_dir+'/./src/dsa_micros '+self.command)
                           Automation.run_session()
@@ -80,9 +81,9 @@ class Automation():
         #pane1.send_keys('./../master/src/dsa_micros '+self.command)
         pane1.send_keys('sleep 5')
         #time.sleep(3)
-        #if self.emon:
-        pane2.send_keys('htop')
-        #pane2.send_keys('timeout 40 python2 emon.py -w '+self.emon_dir)
+        if self.emon:
+        #pane2.send_keys('htop')
+         pane2.send_keys('timeout 40 python2 emon.py -w '+str(self.dir)+"/"+self.emon_dir)
         pane1.send_keys('tmux kill-session -t session_test')
         server.attach_session(target_session="session_test")
         #time.sleep(3)
@@ -96,7 +97,7 @@ class Automation():
 if __name__ == "__main__":
     print("Using Automation version :" ,VERSION)
     parser = ArgumentParser()
-    parser.add_argument('--output_dir', type=str, default='./log/', help="directory to save the log")
+    parser.add_argument('--output_dir', type=str, default=os.getcwd()+"/emon/", help="directory to save the log")
     parser.add_argument('--work_dir', type=str, default='/root/DSA/master', help="working directory path")
     parser.add_argument('--test', type=str, default='./config/emon_config.json',help="name of the configuration tests file")
     parser.add_argument('--iteration', type=int, default=1,help="number of iteration you want to run")
