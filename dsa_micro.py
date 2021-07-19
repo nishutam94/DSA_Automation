@@ -23,9 +23,9 @@ class Automation():
         self.log_dir=""
         self.command=""
         self.dir=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') 
+        self.dsa=self.args.dsa
 
     def date_logs(self):
-   
         path=os.path.join(self.output_dir,self.dir)
         self.log_dir=path    
         try:  
@@ -56,10 +56,15 @@ class Automation():
                             var="-prd"
                           else:
                             var=" " 
-                          self.emon_dir="Hardware_"+str(work)+"_"+str(queuedepth)+"_"+str(transfer)+"_"+str(cpumask)+"_"+str(thread)+"_"+str(index["time"])+"_"+str(iteration)+"_"+str(memory)
+                          cpu_flag=" -m -fc" 
+                          name = "software_" 
+                          if self.dsa:  
+                            cpu_flag=" -fcj "
+                            name = "hardware_"
+                          self.emon_dir=str(name)+str(work)+"_"+str(queuedepth)+"_"+str(transfer)+"_"+str(cpumask)+"_"+str(thread)+"_"+str(index["time"])+"_"+str(iteration)+"_"+str(memory)
                           print("emon dir : ",self.emon_dir)
                           log_name=self.log_dir+"/"+self.emon_dir
-                          self.command="-o"+str(work)+" -n"+str(queuedepth)+" -s"+str(transfer)+" -k"+str(cpumask)+" -i"+str(index["time"])+" -g3 -fjc  "+str(var)+" 2>&1 | tee "+log_name+".txt;" 
+                          self.command="-o"+str(work)+" -n"+str(queuedepth)+" -s"+str(transfer)+" -k"+str(cpumask)+" -i"+str(index["time"])+" -g3"+str(cpu_flag)+str(var)+" 2>&1 | tee "+log_name+".txt;" 
                           #print(self.command)
                           print(self.work_dir+'/./src/dsa_micros '+self.command)
                           Automation.run_session()
@@ -77,32 +82,36 @@ class Automation():
         pane1 = window.attached_pane
         pane2 = window.split_window(vertical=True) 
         window.select_layout('tiled')
-        pane1.send_keys('timeout 60 ./../dsa_micros/src/dsa_micros '+self.command)
-        #pane1.send_keys('./../master/src/dsa_micros '+self.command)
+        pane1.send_keys('./../dsa_micros/src/dsa_micros '+self.command)
         pane1.send_keys('sleep 5')
         #time.sleep(3)
         if self.emon:
-        #pane2.send_keys('htop')
+         pane1.send_keys('timeout 60 ./../dsa_micros/src/dsa_micros '+self.command)
          pane2.send_keys('timeout 40 python2 emon.py -w '+str(self.dir)+"/"+self.emon_dir)
+         pane1.send_keys('sleep 5')
         pane1.send_keys('tmux kill-session -t session_test')
         server.attach_session(target_session="session_test")
         #time.sleep(3)
     def summary(self):
         print("you can find logs in :",self.log_dir)
         os.system("python3 parser.py -p "+self.log_dir+"/")
+        os.system("python3 Sheet_transformer_micro.py -p "+self.log_dir+"/")
 
     def Activate_setup(self):
         print("Activating the Setup")
+        os.system("sudo ./setup_dsa.sh configs/4e1w-d.conf ")
+
        
 if __name__ == "__main__":
     print("Using Automation version :" ,VERSION)
     parser = ArgumentParser()
-    parser.add_argument('--output_dir', type=str, default=os.getcwd()+"/emon/", help="directory to save the log")
-    parser.add_argument('--work_dir', type=str, default='/root/DSA/master', help="working directory path")
+    parser.add_argument('--output_dir', type=str, default=os.getcwd()+"/logs/micro/", help="directory to save the log")
+    parser.add_argument('--work_dir', type=str, default='/root/DSA/dsa_micros', help="working directory path")
     parser.add_argument('--test', type=str, default='./config/emon_config.json',help="name of the configuration tests file")
     parser.add_argument('--iteration', type=int, default=1,help="number of iteration you want to run")
     parser.add_argument('--emon', type=bool, default=False,help="name for the final summary file")
     parser.add_argument('--summary_name', type=str, default="summary.csv",help="name for the final summary file")
+    parser.add_argument('--dsa', type=bool, default=True,help="select DSA vs CPU")
     args = parser.parse_args()
     Automation=Automation(args)
     Automation.date_logs()

@@ -14,7 +14,6 @@ read_file = pd.read_csv (args.output_dir+'summary.csv')
 read_file.to_excel (args.output_dir+'summary.xlsx', index = None, header=True) 
 
 wb1 = xl.load_workbook(args.output_dir+'summary.xlsx') 
-print(wb1)
 ws1 = wb1.worksheets[0] 
 wb = xl.Workbook()
 sheet_obj = wb.active
@@ -39,11 +38,11 @@ for op in list_of_op:
         word = [] 
         word.append(queuedepth)
         for i in range (2, mr + 1):
-            BW=(ws1.cell(row = i, column=12).value)
+            BW=(ws1.cell(row = i, column=13).value)
             op_1=(ws1.cell(row = i, column=1).value)
             qd_1=(ws1.cell(row = i, column=5).value)
             if (op_1==str(op) and queuedepth==int(qd_1)):
-                word.append(ws1.cell(row = i, column=12).value)     
+                word.append(ws1.cell(row = i, column=13).value)     
             filldata(word,row_count)
     row_count=row_count+2     
     filldata("",row_count)   
