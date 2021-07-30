@@ -11,7 +11,7 @@ class emon():
 		self.emonPath = self.args.emonPath
 		self.measTime = self.args.measTime
 
-		os.system("mkdir %s"%(self.results))
+		os.system("mkdir  %s"%(self.results))
 		if self.results == None:
 			self.results = "/root/emon/results"
 			try: 
@@ -38,6 +38,7 @@ class emon():
 		#Adding date and time to the results
 		
 		os.system("mkdir %s"%(self.results))
+		#os.makedirs(self.results)
 		print self.results
 
 		#Validating EMON path
@@ -103,7 +104,7 @@ if __name__ == "__main__":
 	parser.add_argument('--emonPath', type=str, default='/root/emon/sep', help="directory where emon installed")
 	parser.add_argument("-o",'--resultsPath', type=str, default=os.getcwd()+"/emon", help="emon output directory path")
 	parser.add_argument("-w",'--workload', type=str, default=None, help="workload directory name")
-	parser.add_argument('--input', type=str, default='spr-1s-events.txt',help="path configuration emon file")
+	parser.add_argument('--input', type=str, default='spr-events.txt',help="path configuration emon file")
 	parser.add_argument('--measTime', type=int, default=30,help="time to coplete emon")
 	args = parser.parse_args()
 	emon(args)

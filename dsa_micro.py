@@ -46,28 +46,33 @@ class Automation():
                     for cpumask in index["cpumask"]:
                       for transfer in index["transfer"]:
                         for memory in index["memory"]:
-                          print("work :",work)
-                          print("queuedepth :",queuedepth)
-                          print("thread :",thread)
-                          print("cpumask :",cpumask)
-                          print("transfersize :",transfer)
-                          print("memory :",memory)
-                          if memory == "LLC":
-                            var="-prd"
-                          else:
-                            var=" " 
-                          cpu_flag=" -m -fc" 
-                          name = "software_" 
-                          if self.dsa:  
-                            cpu_flag=" -fcj "
-                            name = "hardware_"
-                          self.emon_dir=str(name)+str(work)+"_"+str(queuedepth)+"_"+str(transfer)+"_"+str(cpumask)+"_"+str(thread)+"_"+str(index["time"])+"_"+str(iteration)+"_"+str(memory)
-                          print("emon dir : ",self.emon_dir)
-                          log_name=self.log_dir+"/"+self.emon_dir
-                          self.command="-o"+str(work)+" -n"+str(queuedepth)+" -s"+str(transfer)+" -k"+str(cpumask)+" -i"+str(index["time"])+" -g3"+str(cpu_flag)+str(var)+" 2>&1 | tee "+log_name+".txt;" 
-                          #print(self.command)
-                          print(self.work_dir+'/./src/dsa_micros '+self.command)
-                          Automation.run_session()
+                          for batch in index["batch"]:
+                              print("work :",work)
+                              print("queuedepth :",queuedepth)
+                              print("thread :",thread)
+                              print("cpumask :",cpumask)
+                              print("transfersize :",transfer)
+                              print("memory :",memory)
+                              print("batch :",batch)
+                              if memory == "LLC":
+                                var="-prd"
+                              else:
+                                var=" " 
+                              cpu_flag=" -m -fc" 
+                              name = "software_" 
+                              if self.dsa:  
+                                cpu_flag=" -fcj "
+                                name = "hardware_"
+                              self.emon_dir=str(name)+str(work)+"_"+str(queuedepth)+"_"+str(transfer)+"_"+str(cpumask)+"_"+str(thread)+"_"+str(index["time"])+"_"+str(iteration)+"_"+str(memory)+"_"+str(batch)
+                              print("emon dir : ",self.emon_dir)
+                              log_name=self.log_dir+"/"+self.emon_dir
+                              self.command="-o"+str(work)+" -n"+str(queuedepth)+" -s"+str(transfer)+" -k"+str(cpumask)+" -i"+str(index["time"])+" -b"+str(batch)+" -g3"+str(cpu_flag)+str(var)+" 2>&1 | tee "+log_name+".txt;" 
+                              #print(self.command)
+                              
+                              print(self.work_dir+'/./src/dsa_micros '+self.command)
+                              if self.emon:
+                                os.makedirs("./emon/"+str(self.dir)+"/"+self.emon_dir)
+                              Automation.run_session()
       
 
              
@@ -82,13 +87,16 @@ class Automation():
         pane1 = window.attached_pane
         pane2 = window.split_window(vertical=True) 
         window.select_layout('tiled')
-        pane1.send_keys('./../dsa_micros/src/dsa_micros '+self.command)
-        pane1.send_keys('sleep 5')
+
         #time.sleep(3)
         if self.emon:
-         pane1.send_keys('timeout 60 ./../dsa_micros/src/dsa_micros '+self.command)
+         pane1.send_keys('timeout 45 ./../dsa_micros/src/dsa_micros '+self.command)
          pane2.send_keys('timeout 40 python2 emon.py -w '+str(self.dir)+"/"+self.emon_dir)
          pane1.send_keys('sleep 5')
+        else :
+         pane1.send_keys('./../dsa_micros/src/dsa_micros '+self.command)
+         pane1.send_keys('sleep 5')
+
         pane1.send_keys('tmux kill-session -t session_test')
         server.attach_session(target_session="session_test")
         #time.sleep(3)
@@ -99,7 +107,7 @@ class Automation():
 
     def Activate_setup(self):
         print("Activating the Setup")
-        os.system("sudo ./setup_dsa.sh configs/4e1w-d.conf ")
+        #os.system("sudo ./../dsa_micros/setup_dsa.sh configs/4e1w-d.conf ")
 
        
 if __name__ == "__main__":

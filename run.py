@@ -105,7 +105,7 @@ class Automation():
 if __name__ == "__main__":
     print("Using Automation version :" ,VERSION)
     parser = ArgumentParser()
-    parser.add_argument('-d','--output_dir', type=str, default='./Automation_log/', help="directory to save the log")
+    parser.add_argument('-d','--output_dir', type=str, default='./logs/spdk/', help="directory to save the log")
     parser.add_argument('-o','--spdk_work_dir', type=str, default='/root/DSA/spdk', help="SPDK working directory path")
     parser.add_argument('-t','--thread', type=int, default=1,help="no of thread")
     parser.add_argument('-q','--queuedepth', type=int, default=16,help="no of queue")
